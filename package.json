@@ -17,6 +17,7 @@
 		"node": ">= 0.6.x"
 	},
 	"dependencies": {
+		"event-stream": "3.0.8"
 	},
 	"devDependencies": {
 		"mocha": "1.7.3",
