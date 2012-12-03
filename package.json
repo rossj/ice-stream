@@ -1,7 +1,7 @@
 {
 	"name": "ice-stream",
-	"description": "An expressive streaming utility library for node",
-	"keywords": [],
+	"description": "An expressive streaming utility for node, inspired by Lo-Dash, Async, and event-stream. Ice-stream goal is to allow for complex processing of streaming data.",
+	"keywords": ["stream", "streams", "streaming", "pipes", "piping", "utility", "chaining"],
 	"version": "0.0.1",
 	"author": "Ross Johnson <ross@mazira.com>",
 	"contributors": [],
