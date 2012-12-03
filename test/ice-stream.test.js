@@ -141,6 +141,20 @@ describe('istream', function () {
 		});
 	});
 
+	describe('join', function (cb) {
+		it('should join on newline by default', function (cb) {
+			var msg = 'hello how are you doing?';
+			var s = istream(msg).split(' ').join().stream();
+			assertStreamData(s, msg.split(' ').join('\n'), cb);
+		});
+
+		it('should split on given dilimiter', function (cb) {
+			var msg = 'hello how are you doing?';
+			var s = istream(msg).split(' ').join('-').stream();
+			assertStreamData(s, msg.split(' ').join('-'), cb);
+		});
+	});
+
 	describe('filter', function (cb) {
 		var msg = 'get rid of all words that contain the letter e';
 		var result = 'rid of all words that contain';
