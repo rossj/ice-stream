@@ -25,7 +25,7 @@ var wrappedStream = ic(fsStream);
 // With the wrapped streams you can perform awesome chain piping...
 
 // Parse out unique keywords from the file and output them to stdout
-wrappedStream.split(' ').toLower().unique().without(['ruby', 'python']).join('\n').out();
+wrappedStream.split(' ').toLower().unique().without('ruby', 'python').join('\n').out();
 
 // To unwrap a stream, call the .stream() method
 fsStream = wrappedStream.stream();
