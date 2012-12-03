@@ -1,0 +1,25 @@
+{
+	"name": "ice-stream",
+	"description": "An expressive streaming utility library for node",
+	"keywords": [],
+	"version": "0.0.1",
+	"author": "Ross Johnson <ross@mazira.com>",
+	"contributors": [],
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/rossj/ice-stream"
+	},
+	"main": "./lib/ice-stream.js",
+	"scripts": {
+		"test": "mocha --reporter spec"
+	},
+	"engines": {
+		"node": ">= 0.6.x"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+		"mocha": "1.7.3",
+		"should": "1.2.1"
+	}
+}
