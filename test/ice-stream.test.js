@@ -175,6 +175,48 @@ describe('istream', function () {
 		});
 	});
 
+	describe('toLower, toUpper', function(cb) {
+		var msg = 'this is A MIxTureE of case';
+
+		it('should convert stream to lower case', function(cb) {
+			var s = istream(msg).toLower().stream();
+			assertStreamData(s, msg.toLowerCase(), cb);
+		});
+
+		it('should convert stream to upper case', function(cb) {
+			var s = istream(msg).toUpper().stream();
+			assertStreamData(s, msg.toUpperCase(), cb);
+		});
+	});
+
+	describe('unique', function(cb) {
+		it('should only output unique string parts', function(cb) {
+			var nums = 'one two three one four six nine four';
+			var s = istream(nums).split(' ').unique().stream();
+			assertStreamChunks(s, _.unique(nums.split(' ')), false, cb);
+		});
+
+		it('should only output unique array parts', function(cb) {
+			var nums = [1, 2, 3, 1, 4, 6, 9, 4];
+			var s = istream(nums).unique().stream();
+			assertStreamChunks(s, _.unique(nums), false, cb);
+		});
+	});
+
+	describe('without', function(cb) {
+		it('should not output specified strings', function(cb) {
+			var nums = 'one two three one four six nine four';
+			var s = istream(nums).split(' ').without('one', 'four').stream();
+			assertStreamChunks(s, _.without(nums.split(' '), 'one', 'four'), false, cb);
+		});
+
+		it('should not output specified array values', function(cb) {
+			var nums = [1, 2, 3, 1, 4, 6, 9, 4];
+			var s = istream(nums).without(1, 4).stream();
+			assertStreamChunks(s, _.without(nums, 1, 4), false, cb);
+		});
+	});
+
 	describe('chaining', function (cb) {
 		it('should pipe output down a whole chain starting with a ice-stream object', function (cb) {
 			var msg = 'hello there how are you';
