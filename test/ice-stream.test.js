@@ -21,6 +21,10 @@ describe('istream', function () {
 	 * @param data
 	 */
 	function assertStreamData(stream, data, cb) {
+		if (!stream.readable) {
+			cb(new Error('stream not readable'));
+		}
+
 		var isString = _.isString(data);
 		var buf = isString ? '' : [];
 		stream.on('data', function (chunk) {
@@ -45,6 +49,10 @@ describe('istream', function () {
 	 * @param cb
 	 */
 	function assertStreamChunks(stream, data, order, cb) {
+		if (!stream.readable) {
+			cb(new Error('stream not readable'));
+		}
+
 		var pieces = [];
 		stream.on('data', function (chunk) {
 			pieces.push(chunk);
@@ -90,6 +98,7 @@ describe('istream', function () {
 			assertStreamData(s.stream(), msg, cb);
 		});
 	});
+
 	describe('exec', function () {
 		it('should return a readable, writeable Stream object', function () {
 			var s = istream.exec('echo hello');
@@ -155,6 +164,64 @@ describe('istream', function () {
 		});
 	});
 
+	describe('map', function(cb) {
+		var msg = 'We wILL use Map to CHange THIS STring to Lower Case';
+		var result = msg.toLowerCase();
+
+		it ('map should work with a synchronous function and maintain order', function(cb) {
+			var s = istream(msg).split(' ').map(function (chunk) {
+				return chunk.toLowerCase();
+			}).join(' ').stream();
+			assertStreamData(s, result, cb);
+		});
+
+		it('mapAsync should work with async function and maybe maintain order', function (cb) {
+			var s = istream(msg).split(' ').mapAsync(function (chunk, cb) {
+				// Simulate some varying callback times
+				var ms = Math.floor((Math.random() * 500) + 1);
+				setTimeout(function () {
+					cb(null, chunk.toLowerCase());
+				}, ms);
+			}).stream();
+			assertStreamChunks(s, result.split(' '), false, cb);
+		});
+
+		it('mapAsync should emit an "error" if it is returned from the callback', function (cb) {
+			var s = istream(msg).split(' ').mapAsync(function (chunk, cb) {
+				// Simulate some varying callback times
+				var ms = Math.floor((Math.random() * 500) + 1);
+				setTimeout(function () {
+					cb(new Error('random error'));
+				}, ms);
+			}).stream().on('error', _.once(function(err) {
+				cb();
+			}));
+		});
+
+		it('mapAsyncSeries should work with async function and maintain order', function (cb) {
+			var s = istream(msg).split(' ').mapAsyncSeries(function (chunk, cb) {
+				// Simulate some varying callback times
+				var ms = Math.floor((Math.random() * 500) + 1);
+				setTimeout(function () {
+					cb(null, chunk.toLowerCase());
+				}, ms);
+			}).join(' ').stream();
+			assertStreamData(s, result, cb);
+		});
+
+		it('mapAsyncSeries should emit an "error" if it is returned from the callback', function (cb) {
+			var s = istream(msg).split(' ').mapAsync(function (chunk, cb) {
+				// Simulate some varying callback times
+				var ms = Math.floor((Math.random() * 500) + 1);
+				setTimeout(function () {
+					cb(new Error('random error'));
+				}, ms);
+			}).stream().on('error', _.once(function(err) {
+				cb();
+			}));
+		});
+	});
+
 	describe('filter', function (cb) {
 		var msg = 'get rid of all words that contain the letter e';
 		var result = 'rid of all words that contain';
@@ -162,8 +229,8 @@ describe('istream', function () {
 		it('filter should work with synchronous function and maintain order', function (cb) {
 			var s = istream(msg).split(' ').filter(function (chunk) {
 				return chunk.indexOf('e') === -1;
-			}).stream();
-			assertStreamChunks(s, result.split(' '), true, cb);
+			}).join(' ').stream();
+			assertStreamData(s, result, cb);
 		});
 
 		it('filterAsync should work with async function and maybe maintain order', function (cb) {
@@ -184,8 +251,8 @@ describe('istream', function () {
 				setTimeout(function () {
 					cb(chunk.indexOf('e') === -1);
 				}, ms);
-			}).stream();
-			assertStreamChunks(s, result.split(' '), true, cb);
+			}).join(' ').stream();
+			assertStreamData(s, result, cb);
 		});
 	});
 
