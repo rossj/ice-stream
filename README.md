@@ -10,7 +10,6 @@ I just started this module, so I would like comments, feature requests, and pull
 
 # Examples
 ````javascript
-
 var ic = require('ice-stream');
 
 // First, calling methods with the constructor returns regular streams which can be piped to/from
@@ -39,9 +38,12 @@ fsStream = wrappedStream.stream();
 - exec(cmd) - Spawn an external process - creates a duplex stream
 - split([delimiter]) - Splits the stream, like String.split
 - join([delimiter]) - Joins the stream back together, like String.join
+- map(callback) - Maps the stream chunks using a synchronous callback function
+- mapAsync(callback) - Maps the stream chunks using an async callback - first callback parameter is optional error, second parameter is the mapped value
+- mapAsyncSeries(callback) - Same as above, except the chunks are guaranteed to remain in order
 - filter(callback) - Define a sync function to receive each stream chunk - return false to discard
 - filterAsync(callback) - Define an async function to receive each stream chunk - pass false as first callback parameter to discard
-- filterAsyncSeries(callback) - The same as filterAsync, but the chunks are guaranteed to remain in order
+- filterAsyncSeries(callback) - Same as above, but the chunks are guaranteed to remain in order
 - toLower() - Converts to lower case
 - toUpper() - Converts to upper case
 - unique() - Stores a hash of processed chunks, and discards already seen chunks
