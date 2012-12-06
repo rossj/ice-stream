@@ -1,40 +1,41 @@
 Ice-Stream
 ==========
 
-An expressive streaming utility for node, inspired by [Lo-Dash](http://lodash.com/), [Async](https://github.com/caolan/async), and [event-stream](https://github.com/dominictarr/event-stream). Ice-stream goal is to allow for complex processing of streaming data.
+An expressive streaming utility for node, inspired by [Lo-Dash](http://lodash.com/), [Async](https://github.com/caolan/async), and [event-stream](https://github.com/dominictarr/event-stream).
 
+Ice-Stream aims to make stream processing as easy as the ubiquitous mentioned above make processing arrays and objects.
 
-I just started this module, so I would like comments, feature requests, and pull requests.
+# About Streams
+Stream processing is basically pumping data through a number of operations, piece by piece. Using streams is especially useful when:
+ - There is more data than available memory
+ - The data source is slow, e.g. over a network, user input
+ - Some of the data can be processed without all of the data
 
+In some cases it is useful to think about and operate on a stream as a continual flow of data, and sometimes it is
+better to think about it as a segmented, chunk by chunk flow. Ice-Stream's methods do both, depending on the operation.
 
 
 # Examples
+
+First, to include Ice-Stream
 ````javascript
-var ic = require('ice-stream');
-
-// First, calling methods with the constructor returns regular streams which can be piped to/from
-var fsStream = fs.createReadStream('/path/to/file.txt');
-
-// Make a lowercase stream from the original
-var fsStreamLow = fsStream.pipe(ic.toLower());
-fsStreamLow.on('data', function(data) {
-  console.log(data);
-});
-
-// If you pass a stream, array, or text to the constructor, it returns a wrapped stream
-var wrappedStream = ic(fsStream);
-
-// With the wrapped streams you can create awesome chained pipes
-
-// Parse out unique keywords from the file and output them to stdout
-wrappedStream.split(' ').toLower().unique().without('ruby', 'python').join('\n').out();
-
-// To unwrap a stream, call the .stream() method
-fsStream = wrappedStream.stream();
+var is = require('ice-stream');
 ````
 
-# Methods (many more to come!)
+Using the static methods results in a typical Node `Stream`
+````javascript
+// Stream from a file, through a lowercaser, to an output file
+is.toLower( fs.createReadStream('file.txt') ).pipe( fs.createWriteStream('file-low.txt') );
+````
 
+Passing a `Stream` to the constructor generates a wrapped stream, which can be chained
+````javascript
+// Parse out unique keywords from the file and output them to stdout
+is( fs.createReadStream('file.txt') ).split(' ').toLower().unique().without('ruby', 'python').join('\n').out();
+````
+
+# Methods
+ 
 - exec(cmd) - Spawn an external process - creates a duplex stream
 - split([delimiter]) - Splits the stream, like String.split
 - join([delimiter]) - Joins the stream back together, like String.join
