@@ -171,9 +171,7 @@ __Arguments__
 
 <a name="dropUntil" />
 ### dropUntil(token[, emitMatch])
-Discards all incoming stream data until the `token` string is found, at which point emitting of the incoming data continues. The matching will span chunks boundaries. A second parameter
-indicates whether to emit the match itself when encountered.
-
+Discards all incoming stream data until the `token` string is found, at which point emitting of the incoming data continues. The matching will span chunk boundaries.
 
 __Arguments__
 * token - A string to search for in the stream (unaffected by chunk boundaries).
@@ -182,12 +180,12 @@ __Arguments__
 ---------------------------------------
 
 <a name="dropUntilChunk" />
-### dropUntil(mixed[, emitMatch])
-Discards all incoming stream chunks until a match is found, at which point emitting of the incoming chunks continues. The first parameter can either be a string representing a complete chunk, or a function which
-accepts a chunk and returns a boolean. A second parameter indicates whether to emit the matching chunk when encountered.
+### dropUntilChunk(mixed[, emitMatch])
+Discards all incoming stream chunks until a match is found, at which point emitting of the incoming chunks continues. The first parameter can either be a string representing a complete chunk, or a user-defined
+function which indicates whether the condition to emit has been met.
 
 __Arguments__
-* mixed - A string or function which to compare incoming chunks. If a string is specified, will behave similar to [dropUntil](#dropUntil) except only an exact chunk match will count.
+* mixed - A string or function. If a string is given, will behave similar to [dropUntil](#dropUntil) except only an exact chunk match will count. If a callback function is given, it will be passed a chunk and should return true to indicate that emitting should start.
 * emitMatch - A boolean indicating whether to emit the matched chunk itself when found. Defaults to false.
 
 ---------------------------------------
