@@ -256,6 +256,64 @@ describe('istream', function () {
 		});
 	});
 
+	describe('dropUntil', function(cb) {
+		it('should emit remaining stream after matching whole chunk', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = ' and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntil('blah').stream();
+			assertStreamData(s, output, cb);
+		});
+		it('should emit remaining stream after matching whole chunk, including match if specified', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = 'blah and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntil('blah', true).stream();
+			assertStreamData(s, output, cb);
+		});
+		it('should emit remaining stream after matching across chunks', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = 'h and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntil('s bla').stream();
+			assertStreamData(s, output, cb);
+		});
+		it('should emit remaining stream after matching across chunks, including match if specified', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = 's blah and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntil('s bla', true).stream();
+			assertStreamData(s, output, cb);
+		});
+	});
+
+	describe('dropUntilChunk', function(cb) {
+		it('should emit remaining stream after matching whole chunk', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = ' and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntilChunk('blah').stream();
+			assertStreamData(s, output, cb);
+		});
+		it('should emit remaining stream after matching whole chunk, including match if specified', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = 'blah and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntilChunk('blah', true).stream();
+			assertStreamData(s, output, cb);
+		});
+		it('should emit remaining stream after matching using function', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = ' and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntilChunk(function(chunk) {
+				return chunk === 'blah';
+			}).stream();
+			assertStreamData(s, output, cb);
+		});
+		it('should emit remaining stream after matching using function, including match if specified', function(cb) {
+			var input = 'hello this is blah and I am streaming blah';
+			var output = 'blah and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntilChunk(function(chunk) {
+				return chunk === 'blah';
+			}, true).stream();
+			assertStreamData(s, output, cb);
+		});
+	});
+
 	describe('toLower, toUpper', function(cb) {
 		var msg = 'this is A MIxTureE of case';
 

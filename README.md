@@ -68,6 +68,8 @@ is([1, 4, 6, 2, 91]).map(function(num) {
 * [filter](#filter)
 * [filterAsync](#filterAsync)
 * [filterAsyncSeries](#filterAsyncSeries)
+* [dropUntil](#dropUntil)
+* [dropUntilChunk](#dropUntilChunk)
 * [unique](#unique)
 * [without](#without)
 * [out](#out)
@@ -167,6 +169,28 @@ __Arguments__
 
 ---------------------------------------
 
+<a name="dropUntil" />
+### dropUntil(token[, emitMatch])
+Discards all incoming stream data until the `token` string is found, at which point emitting of the incoming data continues. The matching will span chunks boundaries. A second parameter
+indicates whether to emit the match itself when encountered.
+
+
+__Arguments__
+* token - A string to search for in the stream (unaffected by chunk boundaries).
+* emitMatch - A boolean indicating whether to emit the match itself when found. Defaults to false.
+
+---------------------------------------
+
+<a name="dropUntilChunk" />
+### dropUntil(mixed[, emitMatch])
+Discards all incoming stream chunks until a match is found, at which point emitting of the incoming chunks continues. The first parameter can either be a string representing a complete chunk, or a function which
+accepts a chunk and returns a boolean. A second parameter indicates whether to emit the matching chunk when encountered.
+
+__Arguments__
+* mixed - A string or function which to compare incoming chunks. If a string is specified, will behave similar to [dropUntil](#dropUntil) except only an exact chunk match will count.
+* emitMatch - A boolean indicating whether to emit the matched chunk itself when found. Defaults to false.
+
+---------------------------------------
 <a name="unique" />
 ### unique()
 Stores a hash of processed chunks, and discards already seen chunks. This works with string or object streams, but objects will be hashed based on their `toString()` result.
