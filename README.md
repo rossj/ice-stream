@@ -170,7 +170,7 @@ __Arguments__
 ---------------------------------------
 
 <a name="dropUntil" />
-### dropUntil(token[, emitMatch])
+### dropUntil(token, [emitMatch])
 Discards all incoming stream data until the `token` string is found, at which point emitting of the incoming data continues. The matching will span chunk boundaries.
 
 __Arguments__
@@ -180,12 +180,12 @@ __Arguments__
 ---------------------------------------
 
 <a name="dropUntilChunk" />
-### dropUntilChunk(mixed[, emitMatch])
-Discards all incoming stream chunks until a match is found, at which point emitting of the incoming chunks continues. The first parameter can either be a string representing a complete chunk, or a user-defined
+### dropUntilChunk(mixed, [emitMatch])
+Discards all incoming stream chunks until a match is found, at which point emitting of the incoming chunks continues. The first parameter can either be a string representing a complete chunk, a RegExp expression, or a user-defined
 function which indicates whether the condition to emit has been met.
 
 __Arguments__
-* mixed - A string or function. If a string is given, will behave similar to [dropUntil](#dropUntil) except only an exact chunk match will count. If a callback function is given, it will be passed a chunk and should return true to indicate that emitting should start.
+* mixed - A string, RegExp, or function. If a string is given, will behave similar to [dropUntil](#dropUntil) except only an exact chunk match will count. If a callback function is given, it will be passed a chunk and should return true to indicate that emitting should start.
 * emitMatch - A boolean indicating whether to emit the matched chunk itself when found. Defaults to false.
 
 ---------------------------------------

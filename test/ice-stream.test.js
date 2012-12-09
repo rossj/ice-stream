@@ -284,16 +284,16 @@ describe('istream', function () {
 	});
 
 	describe('dropUntilChunk', function(cb) {
-		it('should emit remaining stream after matching whole chunk', function(cb) {
+		it('should emit remaining stream after matching using string', function(cb) {
 			var input = 'hello this is blah and I am streaming blah';
 			var output = ' and I am streaming blah';
 			var s = istream(input).split(' ').join(' ').dropUntilChunk('blah').stream();
 			assertStreamData(s, output, cb);
 		});
-		it('should emit remaining stream after matching whole chunk, including match if specified', function(cb) {
+		it('should emit remaining stream after matching using RegExp chunk', function(cb) {
 			var input = 'hello this is blah and I am streaming blah';
-			var output = 'blah and I am streaming blah';
-			var s = istream(input).split(' ').join(' ').dropUntilChunk('blah', true).stream();
+			var output = ' and I am streaming blah';
+			var s = istream(input).split(' ').join(' ').dropUntilChunk(/bLaH/i).stream();
 			assertStreamData(s, output, cb);
 		});
 		it('should emit remaining stream after matching using function', function(cb) {
