@@ -401,10 +401,71 @@ describe('istream', function () {
 				cb();
 			});
 		});
-		it('should allow chaining after #count()', function(cb) {
+	});
+
+	describe('chars', function() {
+		var msg = 'hello there how are you';
+
+		it('should return the number of chars in a string to the callback', function(cb) {
+			var count;
+			var s = istream(msg).split(' ').join(' ').chars(function(c) {
+				count = c;
+			});
+			s.stream().on('end', function() {
+				count.should.equal(msg.length);
+				cb();
+			});
+		});
+
+		it('should return the number of chars in a Buffer to the callback', function(cb) {
+			var count;
+			var s = istream([new Buffer(msg)]).chars(function(c) {
+				count = c;
+			});
+			s.stream().on('end', function() {
+				count.should.equal(msg.length);
+				cb();
+			});
+		});
+	});
+
+	describe('bytes', function() {
+		var msg = 'hello there how are you';
+
+		it('should return the number of bytes in a string to the callback', function(cb) {
+			var count;
+			var s = istream(msg).split(' ').join(' ').bytes(function(c) {
+				count = c;
+			});
+			s.stream().on('end', function() {
+				count.should.equal(Buffer.byteLength(msg));
+				cb();
+			});
+		});
+
+		it('should return the number of bytes in a Buffer to the callback', function(cb) {
+			var count;
+			var s = istream([new Buffer(msg)]).bytes(function(c) {
+				count = c;
+			});
+			s.stream().on('end', function() {
+				count.should.equal(new Buffer(msg).length);
+				cb();
+			});
+		});
+	});
+
+	describe('count', function() {
+		it('should return the number of chunks to the callback', function(cb) {
 			var msg = 'hello there how are you';
-			var s = istream(msg).split(' ').count(function() { }).join(' ').stream();
-			assertStreamData(s, msg, cb);
+			var count;
+			var s = istream(msg).split(' ').count(function(c) {
+				count = c;
+			});
+			s.stream().on('end', function() {
+				count.should.equal(msg.split(' ').length);
+				cb();
+			});
 		});
 	});
 });
