@@ -136,7 +136,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('split', function (cb) {
+	describe('split', function () {
 		it('should split on newline by default', function (cb) {
 			var msg = 'hello\nhow\nare\nyou\ndoing?';
 			var s = istream(msg).split().stream();
@@ -150,7 +150,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('join', function (cb) {
+	describe('join', function () {
 		it('should join on newline by default', function (cb) {
 			var msg = 'hello how are you doing?';
 			var s = istream(msg).split(' ').join().stream();
@@ -164,7 +164,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('map', function(cb) {
+	describe('map', function() {
 		var msg = 'We wILL use Map to CHange THIS STring to Lower Case';
 		var result = msg.toLowerCase();
 
@@ -222,7 +222,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('filter', function (cb) {
+	describe('filter', function () {
 		var msg = 'get rid of all words that contain the letter e';
 		var result = 'rid of all words that contain';
 
@@ -256,7 +256,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('dropUntil', function(cb) {
+	describe('dropUntil', function() {
 		it('should emit remaining stream after matching whole chunk', function(cb) {
 			var input = 'hello this is blah and I am streaming blah';
 			var output = ' and I am streaming blah';
@@ -283,7 +283,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('dropUntilChunk', function(cb) {
+	describe('dropUntilChunk', function() {
 		it('should emit remaining stream after matching using string', function(cb) {
 			var input = 'hello this is blah and I am streaming blah';
 			var output = ' and I am streaming blah';
@@ -314,7 +314,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('toLower, toUpper', function(cb) {
+	describe('toLower, toUpper', function() {
 		var msg = 'this is A MIxTureE of case';
 
 		it('should convert stream to lower case', function(cb) {
@@ -328,7 +328,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('unique', function(cb) {
+	describe('unique', function() {
 		it('should only output unique string parts', function(cb) {
 			var nums = 'one two three one four six nine four';
 			var s = istream(nums).split(' ').unique().stream();
@@ -342,7 +342,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('without', function(cb) {
+	describe('without', function() {
 		it('should not output specified strings', function(cb) {
 			var nums = 'one two three one four six nine four';
 			var s = istream(nums).split(' ').without('one', 'four').stream();
@@ -356,7 +356,7 @@ describe('istream', function () {
 		});
 	});
 
-	describe('chaining', function (cb) {
+	describe('chaining', function () {
 		it('should pipe output down a whole chain starting with a ice-stream object', function (cb) {
 			var msg = 'hello there how are you';
 			var s = istream(msg).exec('cat').exec('cat').exec('cat').exec('cat').stream();
@@ -367,6 +367,44 @@ describe('istream', function () {
 			var msg = 'hello there how are you';
 			var s = istream.chain().exec('echo ' + msg).exec('cat').exec('cat').exec('cat').stream();
 			assertStreamData(s, msg + '\n', cb);
+		});
+	});
+
+	describe('each', function() {
+		it('should run the callback for every chunk', function(cb) {
+			var msg = 'hello there how are you';
+			var output = '';
+			var s = istream(msg).split(' ').each(function(chunk) {
+				output += chunk;
+			});
+			s.stream().on('end', function() {
+				output.should.equal(msg.replace(/ /g, ''));
+				cb();
+			});
+		});
+		it('should allow chaining after #each()', function(cb) {
+			var msg = 'hello there how are you';
+			var s = istream(msg).split(' ').each(function() { }).join(' ').stream();
+			assertStreamData(s, msg, cb);
+		});
+	});
+
+	describe('count', function() {
+		it('should return the number of chunks to the callback', function(cb) {
+			var msg = 'hello there how are you';
+			var count;
+			var s = istream(msg).split(' ').count(function(c) {
+				count = c;
+			});
+			s.stream().on('end', function() {
+				count.should.equal(msg.split(' ').length);
+				cb();
+			});
+		});
+		it('should allow chaining after #count()', function(cb) {
+			var msg = 'hello there how are you';
+			var s = istream(msg).split(' ').count(function() { }).join(' ').stream();
+			assertStreamData(s, msg, cb);
 		});
 	});
 });
