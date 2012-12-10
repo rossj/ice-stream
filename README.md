@@ -73,6 +73,9 @@ is([1, 4, 6, 2, 91]).map(function(num) {
 * [unique](#unique)
 * [without](#without)
 * [out](#out)
+* [each](#each)
+* [chars](#chars)
+* [bytes](#bytes)
 
 ---------------------------------------
 
@@ -204,5 +207,32 @@ Discard the specified chunks using strict equality. This works on string or obje
 <a name="out" />
 ### out()
 Simply pipes the stream to stdout.
+
+---------------------------------------
+
+<a name="each" />
+### each(callback)
+Executes the provided callback for each stream chunk.
+
+__Arguments__
+* callback(chunk) - A user-defined function which receives each chunk.
+
+---------------------------------------
+
+<a name="chars" />
+### chars(callback)
+Counts the number of characters going down the stream and passes it to the callback when the stream ends. This will work on incoming string of Buffer data, assuming utf-8 encoding.
+
+__Arguments__
+* callback(count) - A user-defined function which receives the final character count.
+
+---------------------------------------
+
+<a name="bytes" />
+### bytes(callback)
+Counts the number of bytes going down the stream and passes it to the callback when the stream ends. This will work on incoming string or Buffer data, assuming utf-8 encoding.
+
+__Arguments__
+* callback(count) - A user-defined function which receives the final byte count.
 
 ---------------------------------------
