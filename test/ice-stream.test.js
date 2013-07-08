@@ -1,3 +1,4 @@
+/*global describe, it*/
 var
 // Node modules
 	fs = require('fs'),
