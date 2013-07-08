@@ -29,7 +29,7 @@ describe('base64decode', function () {
 	}
 
 	describe('input in a single chunk', function () {
-		it('should properly decode a buffer', function () {
+		it('should properly decode a Buffer', function () {
 			testStream(base64decode(), [new Buffer('YW55IGNhcm5hbCBwbGVhc3VyZS4=')], 'any carnal pleasure.');
 		});
 
