@@ -74,6 +74,22 @@ describe('istream', function () {
 		});
 	}
 
+	describe('Static methods', function () {
+		it('static stream methods should return unwrapped streams', function() {
+			var stream = istream.base64decode();
+			stream.write('YW55IGNhcm5hbCBwbGVhc3VyZS4=');
+			stream.read().toString().should.equal('any carnal pleasure.');
+		});
+	});
+
+	describe('Chaining', function () {
+		it('should allow chaining of streams using ice-stream as method or constructor', function() {
+			var stream = istream().base64decode().stream();
+			stream.write('YW55IGNhcm5hbCBwbGVhc3VyZS4=');
+			stream.read().toString().should.equal('any carnal pleasure.');
+		});
+	});
+
 	describe('Constructor', function () {
 		it('should return a Streamit object when called without "new"', function () {
 			var s = istream();
