@@ -1,14 +1,6 @@
 /*global describe, it*/
-var
-// Node modules
-	fs = require('fs'),
-
-// Npm modules
-	_ = require('lodash'),
-	should = require('should'),
-
-// Project modules
-	base64decode = require('../lib/base64decode.js');
+var should = require('should');
+var base64decode = require('../lib/base64decode.js');
 
 describe('base64decode', function () {
 	/**
@@ -18,7 +10,7 @@ describe('base64decode', function () {
 	 * @param output
 	 */
 	function testStream(stream, inputs, output) {
-		for (var i = 0; i < inputs.length; i++)
+		for ( var i = 0; i < inputs.length; i++ )
 			stream.write(inputs[i]);
 
 		stream.end();

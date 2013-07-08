@@ -1,14 +1,6 @@
 /*global describe, it*/
-var
-// Node modules
-	fs = require('fs'),
-
-// Npm modules
-	_ = require('lodash'),
-	should = require('should'),
-
-// Project modules
-	base64decode = require('../lib/base64encode.js');
+var should = require('should');
+var base64decode = require('../lib/base64encode.js');
 
 describe('base64encode', function () {
 	/**
@@ -18,7 +10,7 @@ describe('base64encode', function () {
 	 * @param output
 	 */
 	function testStream(stream, inputs, output) {
-		for (var i = 0; i < inputs.length; i++)
+		for ( var i = 0; i < inputs.length; i++ )
 			stream.write(inputs[i]);
 
 		stream.end();
@@ -44,21 +36,29 @@ describe('base64encode', function () {
 
 	describe('input in multiple chunks, lengths divisible by 3', function () {
 		it('should properly encode a Buffer', function () {
-			testStream(base64decode(), [new Buffer('any ca'), new Buffer('rnal p'), new Buffer('leasur')], 'YW55IGNhcm5hbCBwbGVhc3Vy');
+			testStream(base64decode(), [
+				new Buffer('any ca'), new Buffer('rnal p'), new Buffer('leasur')
+			], 'YW55IGNhcm5hbCBwbGVhc3Vy');
 		});
 
 		it('should properly encode a Buffer and include padding', function () {
-			testStream(base64decode(), [new Buffer('any ca'), new Buffer('rnal p'), new Buffer('leasure.')], 'YW55IGNhcm5hbCBwbGVhc3VyZS4=');
+			testStream(base64decode(), [
+				new Buffer('any ca'), new Buffer('rnal p'), new Buffer('leasure.')
+			], 'YW55IGNhcm5hbCBwbGVhc3VyZS4=');
 		});
 	});
 
 	describe('input in multiple chunks, lengths not divisible by 3', function () {
 		it('should properly encode a Buffer', function () {
-			testStream(base64decode(), [new Buffer('any carn'), new Buffer('al pl'), new Buffer('easur')], 'YW55IGNhcm5hbCBwbGVhc3Vy');
+			testStream(base64decode(), [
+				new Buffer('any carn'), new Buffer('al pl'), new Buffer('easur')
+			], 'YW55IGNhcm5hbCBwbGVhc3Vy');
 		});
 
 		it('should properly encode a Buffer and include padding', function () {
-			testStream(base64decode(), [new Buffer('any carn'), new Buffer('al pl'), new Buffer('easure.')], 'YW55IGNhcm5hbCBwbGVhc3VyZS4=');
+			testStream(base64decode(), [
+				new Buffer('any carn'), new Buffer('al pl'), new Buffer('easure.')
+			], 'YW55IGNhcm5hbCBwbGVhc3VyZS4=');
 		});
 	});
 });
