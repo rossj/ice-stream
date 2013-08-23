@@ -195,7 +195,7 @@ describe('istream', function () {
 		it('mapAsync should work with async function and maybe maintain order', function (cb) {
 			var s = istream(msg).split(' ').mapAsync(function (chunk, cb) {
 				// Simulate some varying callback times
-				var ms = Math.floor((Math.random() * 500) + 1);
+				var ms = Math.floor((Math.random() * 100) + 1);
 				setTimeout(function () {
 					cb(null, chunk.toLowerCase());
 				}, ms);
@@ -206,7 +206,7 @@ describe('istream', function () {
 		it('mapAsync should emit an "error" if it is returned from the callback', function (cb) {
 			var s = istream(msg).split(' ').mapAsync(function (chunk, cb) {
 				// Simulate some varying callback times
-				var ms = Math.floor((Math.random() * 500) + 1);
+				var ms = Math.floor((Math.random() * 100) + 1);
 				setTimeout(function () {
 					cb(new Error('random error'));
 				}, ms);
@@ -243,28 +243,17 @@ describe('istream', function () {
 		var msg = 'get rid of all words that contain the letter e';
 		var result = 'rid of all words that contain';
 
-		it('filter should work with synchronous function and maintain order', function (cb) {
+		it('should work with synchronous function and maintain order', function (cb) {
 			var s = istream(msg).split(' ').filter(function (chunk) {
 				return chunk.indexOf('e') === -1;
 			}).join(' ').stream();
 			assertStreamData(s, result, cb);
 		});
 
-		it('filterAsync should work with async function and maybe maintain order', function (cb) {
-			var s = istream(msg).split(' ').filterAsync(function (chunk, cb) {
+		it('should work with async function and maintain order', function (cb) {
+			var s = istream(msg).split(' ').filter(function (chunk, cb) {
 				// Simulate some varying callback times
-				var ms = Math.floor((Math.random() * 500) + 1);
-				setTimeout(function () {
-					cb(chunk.indexOf('e') === -1);
-				}, ms);
-			}).stream();
-			assertStreamChunks(s, result.split(' '), false, cb);
-		});
-
-		it('filterAsyncSeries should work with async function and maintain order', function (cb) {
-			var s = istream(msg).split(' ').filterAsyncSeries(function (chunk, cb) {
-				// Simulate some varying callback times
-				var ms = Math.floor((Math.random() * 500) + 1);
+				var ms = Math.floor((Math.random() * 100) + 1);
 				setTimeout(function () {
 					cb(chunk.indexOf('e') === -1);
 				}, ms);
