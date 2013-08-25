@@ -17,9 +17,10 @@
 		"node": ">= 0.6.x"
 	},
 	"dependencies": {
-		"lodash" : "*",
+		"lodash" : "1.3.1",
 		"event-stream": "3.0.8",
-		"base64-stream" : "0.1.2"
+		"base64-stream" : "0.1.2",
+		"readable-stream" : "1.0.2"
 	},
 	"devDependencies": {
 		"mocha": "1.7.3",
