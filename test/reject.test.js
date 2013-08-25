@@ -1,8 +1,8 @@
 /*global describe, it*/
 var should = require('should');
-var Filter = require('../lib/filter.js');
+var Reject = require('../lib/reject.js');
 
-describe('Filter', function () {
+describe('Reject', function () {
 	/**
 	 * This function emits an array of string chunks to the stream, and then compares the outputs to given values.
 	 * @param stream
@@ -33,33 +33,33 @@ describe('Filter', function () {
 	}
 
 	describe('constructor', function () {
-		it('should return an instance of Filter whether or not using "new"', function () {
-			var stream1 = new Filter();
-			stream1.should.be.an.instanceOf(Filter);
+		it('should return an instance of Reject whether or not using "new"', function () {
+			var stream1 = new Reject();
+			stream1.should.be.an.instanceOf(Reject);
 
-			var stream2 = Filter();
-			stream2.should.be.an.instanceOf(Filter);
+			var stream2 = Reject();
+			stream2.should.be.an.instanceOf(Reject);
 		});
 
 		it('should properly set the objectMode property', function () {
-			var stream = new Filter();
+			var stream = new Reject();
 			stream._writableState.objectMode.should.equal(true);
 		});
 	});
 
 	it('should work when returning synchronously', function (cb) {
-		var stream = new Filter(function (chunk) {
-			return chunk !== 'b';
+		var stream = new Reject(function (chunk) {
+			return chunk === 'b';
 
 		});
 		testStream(stream, ['a', 'b', 'c', 'b', 'a'], ['a', 'c', 'a'], cb);
 	});
 
 	it('should work when returning asynchronously', function (cb) {
-		var stream = new Filter(function (chunk, cb) {
+		var stream = new Reject(function (chunk, cb) {
 
 			process.nextTick(function () {
-				cb(chunk !== 'b');
+				cb(chunk === 'b');
 			});
 		});
 		testStream(stream, ['a', 'b', 'c', 'b', 'a'], ['a', 'c', 'a'], cb);

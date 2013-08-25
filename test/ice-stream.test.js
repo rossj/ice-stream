@@ -262,6 +262,29 @@ describe('istream', function () {
 		});
 	});
 
+	describe('reject', function () {
+		var msg = 'get rid of all words that contain the letter e';
+		var result = 'rid of all words that contain';
+
+		it('should work with synchronous function and maintain order', function (cb) {
+			var s = istream(msg).split(' ').reject(function (chunk) {
+				return chunk.indexOf('e') !== -1;
+			}).join(' ').stream();
+			assertStreamData(s, result, cb);
+		});
+
+		it('should work with async function and maintain order', function (cb) {
+			var s = istream(msg).split(' ').reject(function (chunk, cb) {
+				// Simulate some varying callback times
+				var ms = Math.floor((Math.random() * 100) + 1);
+				setTimeout(function () {
+					cb(chunk.indexOf('e') !== -1);
+				}, ms);
+			}).join(' ').stream();
+			assertStreamData(s, result, cb);
+		});
+	});
+
 	describe('dropUntil', function() {
 		it('should emit remaining stream after matching whole chunk', function(cb) {
 			var input = 'hello this is blah and I am streaming blah';
